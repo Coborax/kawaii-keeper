@@ -7,6 +7,8 @@ import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 
+import { AuthProvider, useAuth } from './auth'
+
 const theme = extendTheme({
   colorSchemes: {
     dark: {
@@ -21,6 +23,8 @@ const theme = extendTheme({
 })
 
 import './index.css'
+import './scaffold.css'
+
 
 interface AppProps {
   children?: ReactNode
@@ -29,9 +33,11 @@ interface AppProps {
 const App = ({ children }: AppProps) => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <CssVarsProvider defaultMode="dark" theme={theme}>
-        <RedwoodApolloProvider>{children}</RedwoodApolloProvider>
-      </CssVarsProvider>
+      <AuthProvider>
+        <CssVarsProvider defaultMode="dark" theme={theme}>
+          <RedwoodApolloProvider useAuth={useAuth}>{children}</RedwoodApolloProvider>
+        </CssVarsProvider>
+      </AuthProvider>
     </RedwoodProvider>
   </FatalErrorBoundary>
 )

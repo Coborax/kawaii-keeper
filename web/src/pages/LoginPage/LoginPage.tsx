@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react'
+
 import {
   Box,
   Button,
@@ -8,12 +10,37 @@ import {
   Typography,
 } from '@mui/joy'
 
-import { Metadata } from '@redwoodjs/web'
+import { Form } from '@redwoodjs/forms'
+import { navigate, routes } from '@redwoodjs/router'
+import { toast } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 import bgImage from './bg.jpg'
 import mascotImage from './mascot.png'
+import { Metadata } from '@redwoodjs/web'
 
 const LoginPage = () => {
+  const { logIn } = useAuth()
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit = async (data) => {
+    setLoading(true)
+    try {
+      const response = await logIn({ ...data })
+      if (response.error) {
+        toast.error(response.error)
+      } else {
+        toast.success('Welcome back!')
+        navigate(routes.home())
+      }
+    } catch (error) {
+      toast.error('An error occurred during login')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <>
       <Metadata title="Login" description="Login page" />
@@ -80,25 +107,31 @@ const LoginPage = () => {
             Kawaii Keeper
           </Typography>
 
-          <form onSubmit={(e) => e.preventDefault()}>
+          <Form onSubmit={onSubmit}>
             <FormControl sx={{ mb: 2 }}>
               <FormLabel>Email</FormLabel>
-              <Input type="email" placeholder="Enter your email" required />
+              <Input
+                type="email"
+                name="username"
+                placeholder="Enter your email"
+                required
+              />
             </FormControl>
 
             <FormControl sx={{ mb: 2 }}>
               <FormLabel>Password</FormLabel>
               <Input
                 type="password"
+                name="password"
                 placeholder="Enter your password"
                 required
               />
             </FormControl>
 
-            <Button type="submit" fullWidth sx={{ mt: 1 }}>
+            <Button type="submit" fullWidth sx={{ mt: 1 }} loading={loading}>
               Sign in
             </Button>
-          </form>
+          </Form>
         </Sheet>
       </Box>
     </>

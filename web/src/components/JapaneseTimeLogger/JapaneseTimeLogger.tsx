@@ -9,23 +9,24 @@ import {
 } from '@mui/joy'
 
 interface StudyLogEntry {
-  id?: string
-  date: string
-  startTime: string
-  endTime: string
-  duration: number
+  userId?: string
+  startTime: Date
+  endTime: Date
   category: 'Listening' | 'Reading'
   immersionType: string
   immersionSource: string
 }
 
-const JapaneseTimeLogger: React.FC = () => {
+interface JapaneseTimeLoggerProps {
+  onLogStudy: (studyLog: StudyLogEntry) => void
+}
+
+const JapaneseTimeLogger: React.FC = ({ onLogStudy }: JapaneseTimeLoggerProps) => {
   const [startTime, setStartTime] = useState<string>('')
   const [endTime, setEndTime] = useState<string>('')
   const [category, setCategory] = useState<'Listening' | 'Reading'>('Listening')
   const [immersionType, setImmersionType] = useState<string>('TV Show')
   const [immersionSource, setImmersionSource] = useState<string>('')
-  const [studyLogs, setStudyLogs] = useState<StudyLogEntry[]>([])
 
   const immersionTypes = [
     'TV Show',
@@ -44,24 +45,23 @@ const JapaneseTimeLogger: React.FC = () => {
       return
     }
 
-    const startDateTime = new Date(`1970-01-01T${startTime}`)
-    const endDateTime = new Date(`1970-01-01T${endTime}`)
+    // Create date objects from input strings today's date
+    const today = new Date()
+    const startDateTime = new Date(`${today.toISOString().split('T')[0]}T${startTime}`)
+    const endDateTime = new Date(`${today.toISOString().split('T')[0]}T${endTime}`)
 
     // Calculate duration in hours
     const duration = Math.abs(endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60)
 
     const newEntry: StudyLogEntry = {
-      id: Date.now().toString(),
-      date: new Date().toISOString(),
-      startTime,
-      endTime,
-      duration,
+      startTime: startDateTime,
+      endTime: endDateTime,
       category,
       immersionType,
       immersionSource
     }
 
-    setStudyLogs([...studyLogs, newEntry])
+    onLogStudy(newEntry)
 
     // Reset form
     setStartTime('')
@@ -126,37 +126,6 @@ const JapaneseTimeLogger: React.FC = () => {
       />
 
       <Button onClick={handleLogStudy}>Log Study Time</Button>
-
-      {studyLogs.length > 0 && (
-        <Box>
-          <Typography level="title-md" sx={{ mt: 2, mb: 1 }}>
-            Study Log History
-          </Typography>
-          {studyLogs.map((log) => (
-            <Box
-              key={log.id}
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                bgcolor: 'background.surface',
-                p: 1,
-                borderRadius: 'sm',
-                mb: 1
-              }}
-            >
-              <Box>
-                <Typography level="body-sm">
-                  {formatDate(log.date)} | {log.startTime} - {log.endTime} ({log.duration.toFixed(2)} hours)
-                </Typography>
-                <Typography level="body-xs" color="neutral">
-                  {log.category} | {log.immersionType}: {log.immersionSource}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
-        </Box>
-      )}
     </Box>
   )
 }

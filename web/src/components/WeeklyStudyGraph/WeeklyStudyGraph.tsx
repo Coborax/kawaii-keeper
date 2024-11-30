@@ -1,13 +1,6 @@
 import React from 'react'
 import { Box, Typography } from '@mui/joy'
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer
-} from 'recharts'
+import StudyLogsCell from 'src/components/StudyLogsCell'
 
 // Sample data structure for study time
 interface StudyData {
@@ -25,63 +18,39 @@ const COLOR_SCHEME = [
 ]
 
 interface WeeklyStudyGraphProps {
-  data?: StudyData[]
-  title?: string
+  userId: number
 }
 
 const WeeklyStudyGraph: React.FC<WeeklyStudyGraphProps> = ({
-  title = 'Japanese Study Time',
-  data = [
-    { day: 'Mon', hours: 1.5 },
-    { day: 'Tue', hours: 2 },
-    { day: 'Wed', hours: 1.8 },
-    { day: 'Thu', hours: 2.2 },
-    { day: 'Fri', hours: 1.6 },
-    { day: 'Sat', hours: 3 },
-    { day: 'Sun', hours: 2.5 }
-  ]
+  userId
 }) => {
-  // Enhance data with colors based on study hours
-  const enhancedData = data.map((item, index) => ({
-    ...item,
-    color: COLOR_SCHEME[Math.min(Math.floor(item.hours), COLOR_SCHEME.length - 1)]
-  }))
+  // // Enhance data with colors based on study hours
+  // const enhancedData = data.map((item, index) => ({
+  //   ...item,
+  //   color: COLOR_SCHEME[Math.min(Math.floor(item.hours), COLOR_SCHEME.length - 1)]
+  // }))
+
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+
+  const startOfWeek = new Date(today)
+  startOfWeek.setDate(today.getDate() - dayOfWeek)
+  startOfWeek.setHours(0, 0, 0, 0)
+
+  const endOfWeek = new Date(today)
+  endOfWeek.setDate(today.getDate() + 6)
+  endOfWeek.setHours(23, 59, 59, 999)
 
   return (
     <Box>
       <Box sx={{ mb: 2 }}>
-        <Typography level="title-lg">{title}</Typography>
+        <Typography level="title-lg">Weekly Overview</Typography>
         <Typography level="body-sm" color="neutral">
           Weekly Japanese Study Time (Hours)
         </Typography>
       </Box>
 
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={enhancedData}>
-          <XAxis dataKey="day" />
-          <YAxis
-            label={{
-              value: 'Hours',
-              angle: -90,
-              position: 'insideLeft'
-            }}
-          />
-          <Tooltip
-            formatter={(value) => [`${value} hours`, 'Study Time']}
-            contentStyle={{
-              backgroundColor: 'rgba(0,0,0,0.8)',
-              color: 'white'
-            }}
-          />
-          <Bar
-            dataKey="hours"
-            barSize={30}
-            radius={[4, 4, 0, 0]}
-            fill="#8884d8"
-            activeBar={{ fill: '#3182CE' }}
-          />
-        </BarChart>
-      </ResponsiveContainer>
+      <StudyLogsCell userId={userId} startTime={startOfWeek.toISOString()} endTime={endOfWeek.toISOString()}></StudyLogsCell>
 
       <Box
         sx={{
@@ -90,12 +59,12 @@ const WeeklyStudyGraph: React.FC<WeeklyStudyGraphProps> = ({
           mt: 2
         }}
       >
-        <Typography level="body-sm" color="neutral">
+        {/* <Typography level="body-sm" color="neutral">
           Total Weekly Study: {data.reduce((sum, day) => sum + day.hours, 0).toFixed(1)} hours
         </Typography>
         <Typography level="body-sm" color="primary">
           Average: {(data.reduce((sum, day) => sum + day.hours, 0) / data.length).toFixed(1)} hours/day
-        </Typography>
+        </Typography> */}
       </Box>
     </Box>
   )

@@ -39,7 +39,7 @@ model UserCredential {
 }
 
 model StudyLog {
-  id              String   @id
+  id              String   @id @default(cuid())
   userId          Int
   user            User     @relation(fields: [userId], references: [id])
   startTime       DateTime

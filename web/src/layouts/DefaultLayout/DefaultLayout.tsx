@@ -3,6 +3,7 @@ import { Box, Sheet } from '@mui/joy'
 import { useAuth } from 'src/auth'
 import NavigationBar from 'src/components/NavigationBar/NavigationBar'
 import AnimeBg from 'src/components/AnimeBg/AnimeBg'
+import { navigate } from '@redwoodjs/router'
 
 type DefaultLayoutProps = {
   children: React.ReactNode
@@ -13,6 +14,10 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
 
   const handleLogout = () => {
     logOut()
+  }
+
+  const handleNavigate = (path: string) => {
+    navigate(path)
   }
 
   return (
@@ -53,6 +58,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
               avatar: '/path/to/avatar.jpg',
             }}
             onLogout={() => handleLogout()}
+            onNavigate={(path) => handleNavigate(path)}
           />
         </Sheet>
 

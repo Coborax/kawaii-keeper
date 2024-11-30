@@ -16,7 +16,8 @@ import {
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   Favorite as FavoriteIcon,
-  Notifications as NotificationsIcon
+  Notifications as NotificationsIcon,
+  Timer as TimerIcon
 } from '@mui/icons-material'
 
 interface UserSidebarProps {
@@ -41,18 +42,13 @@ const UserSidebar: React.FC<UserSidebarProps> = ({
   const menuItems = [
     {
       icon: <HomeIcon />,
-      text: 'Home',
-      path: '/home'
+      text: 'Dashboard',
+      path: '/'
     },
     {
-      icon: <ProfileIcon />,
-      text: 'Profile',
-      path: '/profile'
-    },
-    {
-      icon: <FavoriteIcon />,
-      text: 'Favorites',
-      path: '/favorites'
+      icon: <TimerIcon />,
+      text: 'Pomodoro',
+      path: '/pomodoro'
     },
     {
       icon: <SettingsIcon />,

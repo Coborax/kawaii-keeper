@@ -26,6 +26,7 @@ model User {
   credentials         UserCredential[]
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
+  StudyLog            StudyLog[]
 }
 
 model UserCredential {
@@ -35,4 +36,17 @@ model UserCredential {
   publicKey  Bytes
   transports String?
   counter    BigInt
+}
+
+model StudyLog {
+  id              String   @id
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  startTime       DateTime
+  endTime         DateTime
+  category        String
+  immersionType   String
+  immersionSource String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

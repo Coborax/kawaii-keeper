@@ -19,8 +19,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
 import JoyInput from 'src/components/JoyInput/JoyInput'
-
-import bgImage from '../LoginPage/bg.jpg'
+import AnimeBg from 'src/components/AnimeBg/AnimeBg'
 import mascotImage from '../LoginPage/mascot.png'
 
 const SignupPage = () => {
@@ -46,9 +45,7 @@ const SignupPage = () => {
       const response = await signUp({
         username: data.username,
         password: data.password,
-        userAttributes: {
-          email: data.email,
-        },
+        email: data.email,
       })
 
       if (response.message) {
@@ -69,25 +66,8 @@ const SignupPage = () => {
     <>
       <Metadata title="Signup" />
 
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          width: '100vw',
-          margin: 0,
-          padding: 0,
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          bgcolor: 'background.body',
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
+      <AnimeBg>
+        {' '}
         <Sheet
           variant="outlined"
           sx={{
@@ -191,7 +171,7 @@ const SignupPage = () => {
             </JoyLink>
           </Typography>
         </Sheet>
-      </Box>
+      </AnimeBg>
     </>
   )
 }

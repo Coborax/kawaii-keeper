@@ -1,53 +1,47 @@
-import { useRef, useState } from 'react'
-
+import { useState } from 'react';
 import {
   Box,
   Button,
   FormControl,
-  FormLabel,
-  Input,
-  Sheet,
+  FormLabel, Sheet,
   Typography,
-  Link as JoyLink,
-} from '@mui/joy'
+  Link as JoyLink
+} from '@mui/joy';
+import { Form, useForm } from '@redwoodjs/forms';
+import { Link as RouterLink, navigate, routes } from '@redwoodjs/router';
+import { toast } from '@redwoodjs/web/toast';
+import { useAuth } from 'src/auth';
+import mascotImage from './mascot.png';
+import { Metadata } from '@redwoodjs/web';
+import AnimeBg from 'src/components/AnimeBg/AnimeBg';
+import JoyInput from 'src/components/JoyInput/JoyInput';
 
-import { Form, useForm } from '@redwoodjs/forms'
-import { Link as RouterLink, navigate, routes } from '@redwoodjs/router'
-import { toast } from '@redwoodjs/web/toast'
+export const LoginPage = () => {
+  const { logIn } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-import { useAuth } from 'src/auth'
-
-import mascotImage from './mascot.png'
-import { Metadata } from '@redwoodjs/web'
-import AnimeBg from 'src/components/AnimeBg/AnimeBg'
-import JoyInput from 'src/components/JoyInput/JoyInput'
-
-const LoginPage = () => {
-  const { logIn } = useAuth()
-  const [loading, setLoading] = useState(false)
-
-  const formMethods = useForm()
+  const formMethods = useForm();
 
   const onSubmit = async (data) => {
-    setLoading(true)
+    setLoading(true);
 
     try {
       const response = await logIn({
         username: data.username,
-        password: data.password,
-      })
+        password: data.password
+      });
       if (response.error) {
-        toast.error(response.error)
+        toast.error(response.error);
       } else {
-        toast.success('Welcome back!')
-        navigate(routes.home())
+        toast.success('Welcome back!');
+        navigate(routes.home());
       }
     } catch (error) {
-      toast.error('An error occurred during login')
+      toast.error('An error occurred during login');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -82,8 +76,7 @@ const LoginPage = () => {
               borderRadius: '50%',
               backgroundColor: 'rgba(0, 0, 0, 0.7)',
               padding: 1,
-            }}
-          />
+            }} />
           <Typography
             level="h4"
             component="h1"
@@ -101,11 +94,10 @@ const LoginPage = () => {
             <FormControl sx={{ mb: 2 }}>
               <FormLabel>Username</FormLabel>
               <JoyInput
+                type="username"
                 name="username"
-                register={formMethods.register}
-                validation={{ required: true }}
-                autoComplete="username"
-              />
+                placeholder="Enter your Username"
+                required />
             </FormControl>
 
             <FormControl sx={{ mb: 2 }}>
@@ -113,10 +105,8 @@ const LoginPage = () => {
               <JoyInput
                 type="password"
                 name="password"
-                register={formMethods.register}
-                validation={{ required: true }}
-                autoComplete="current-password"
-              />
+                placeholder="Enter your password"
+                required />
             </FormControl>
 
             <Button type="submit" fullWidth sx={{ mt: 1 }} loading={loading}>
@@ -139,7 +129,5 @@ const LoginPage = () => {
         </Sheet>
       </AnimeBg>
     </>
-  )
-}
-
-export default LoginPage
+  );
+};

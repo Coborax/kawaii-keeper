@@ -23,12 +23,15 @@
   },
   "packageManager": "yarn@4.4.0",
   "resolutions": {
-    "@storybook/react-dom-shim@npm:7.6.17": "https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz"
+    "@storybook/react-dom-shim@npm:7.6.17": "https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz",
+    "@mui/material": "^6.1.9"
   },
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
     "@fontsource/inter": "^5.1.0",
-    "@mui/joy": "5.0.0-beta.48"
+    "@mui/icons-material": "^6.1.9",
+    "@mui/joy": "5.0.0-beta.48",
+    "@mui/material": "npm:@mui/joy@latest"
   }
 }
